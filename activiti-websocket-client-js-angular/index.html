@@ -15,6 +15,24 @@
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/main.css">
         <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="js/vendor/stomp.js"></script>
+        <script type="text/javascript">
+            var client = Stomp.client( "ws://localhost:61614/stomp", "v11.stomp" );
+
+            client.connect( "", "",
+                    function() {
+                        client.subscribe("jms.topic.test",
+                                function( message ) {
+                                    alert( message );
+                                },
+                                { priority: 9 }
+                        );
+
+                        client.send("jms.topic.test", { priority: 9 }, "Pub/Sub over STOMP!");
+                    }
+            );
+
+        </script>
     </head>
 
     <body>
